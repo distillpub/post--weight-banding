@@ -42,13 +42,145 @@
 <d-title></d-title>
 
 <d-article>
-
   <p>
-    Typically, we parameterize the input image as the RGB values of each pixel.
-    But that isn’t the only way to parameterize images.
-    And, as long as the mapping from parameters to images is differentiable, we can still optimize alternative parameterizations with gradient descent.
+    Weight banding is a phenomenon that we found to occur in a variety of common vision models. It appears as horizontal bands
+    within layer weights at the end of the network. The bands are visible when neurons are are visualized using NMF dimensionality
+    reduction into the RGB space. Banding implies a preference of neurons to vertically track the input features layer to layer.
+    Some amount of banding in some neurons is expected but we were surprised to find it to be the common dominant pattern at the
+    later layers within many common networks. [expand this]
   </p>
 
+  <figure class="subgrid">
+    <div class="l-body">
+      <div class="weight-banding-example" style="width: 30%">
+        <img src="images/modelzoo_inceptionv1_mixed5b.png" />
+        <span class="label">InceptionV1<br />mixed 5b</span>
+      </div>
+      <div class="weight-banding-example" style="width: 30%">
+        <img src="images/modelzoo_resnet50_block4_unit_3.png" />
+        <span class="label">ResNet50<br />block 4 unit 3 (partial)</span>
+      </div>
+      <div class="weight-banding-example" style="width: 30%">
+        <img src="images/modelzoo_vgg19_conv5.png" />
+        <span class="label">VGG19<br />conv5 (partial)</span>
+      </div>
+    </div>
+  </figure>
+
+  <p>
+    Our hypothesis is that banding is a learned way to preserve spatial information as it gets lost through various
+    pooling operations. Common networks typically include a pooling operation between their last convolutional layer a final
+    fully connected or linear layer. Interestingly, AlexNet does not exhibit this phenomenon and it also does not include
+    a final pooling operation that loses all spatial information (the final input is 6x6x256 to its group of fully connected layers).
+  </p>
+
+  <figure class="subgrid">
+    <div class="l-body">
+      <div class="weight-banding-example" style="width: 60%">
+        <img src="images/modelzoo_alexnet_conv5.png" />
+        <span class="label">AlexNet<br />conv5</span>
+      </div>
+    </div>
+  </figure>
+
+  <h2>Method of study</h2>
+  <p>
+    To study this phenomenon, we used a simplified network architecture compared to Inception, ResNet, or VGG. In our
+    achitecture there are 6 groups of convolutions, separated by L2 pooling layers. At the end a global average pooling operation
+    reduces the input to 512 values that are fed to a fully connected layer with 1001 output. Training is done on ImageNet
+    using TF-Slim on 8 GPUs over about 8 hours.
+  </p>
+
+  <figure class="subgrid">
+    <div class="l-body" id="simplified-network-diagram">
+      [FIGURE PLACEHOLDER]
+      <ul>
+        <li>softmax, 1x1x1001</li>
+        <li>fully connected, 1x1x1001</li>
+        <li>Global Average Pool, 512</li>
+        <li><strong>5b:</strong>5x5 conv, 7x7x512</li>
+        <li><strong>5a:</strong>5x5 conv, 7x7x512</li>
+        <li>L2 Pooling</li>
+        <li><strong>4e:</strong>5x5 conv, 14x14x256</li>
+        <li><strong>4d:</strong>5x5 conv, 14x14x256</li>
+        <li><strong>4c:</strong>5x5 conv, 14x14x256</li>
+        <li><strong>4b:</strong>5x5 conv, 14x14x256</li>
+        <li><strong>4a:</strong>5x5 conv, 14x14x256</li>
+        <li>L2 Pooling</li>
+        <li><strong>3b:</strong>5x5 conv, 28x28x128</li>
+        <li><strong>3a:</strong>5x5 conv, 28x28x128</li>
+        <li>L2 Pooling</li>
+        <li><strong>2a:</strong>5x5 conv, 56x56x64</li>
+        <li>L2 Pooling</li>
+        <li><strong>1a:</strong>5x5 conv, 112x112x64</li>
+        <li>L2 Pooling</li>
+        <li><strong>0a:</strong> 7x7 conv, 224x224x32</li>
+        <li>Input: 224x224</li>
+      </ul>
+    </div>
+  </figure>
+
+  <p>
+    Most of the investigation has focused on trying different alterations to the end of this network around
+    layers 5a, 5b, and the final fully connected layer. The goal is to see how this phenomenon changes as various techniques
+    to preserve spatial information are used.
+  </p>
+
+  <h2>What affects banding?</h2>
+  <h3>Rotating images 90 degrees</h3>
+  <p>To rule out bugs in training or some strange numerical problem, we decided to do a training run with the input rotated 90 degrees.
+    This sanity check yielded a very clear result showing vertical banding in the resulting weights. This is a clear indication that
+  banding is a result of properties within the ImageNet dataset which make spatial vertical position relevant.</p>
+
+  <figure class="subgrid">
+    <div class="l-body">
+      [FIGURE PLACEHOLDER: show vertical banding at 5a and 5b]
+    </div>
+  </figure>
+
+  <h3>Fully connected layer without pooling</h3>
+  <p>Removing the global average pooling step in our simplified model allows the fully connected layer to see all 7x7x512 inputs at once.
+    This model <strong>did not exhibit weight banding</strong>, but used 49x more parameters in the FC layer and overfit to the training set.
+    This is pretty strong evidence that the use of aggressive pooling after the last convolutions in common models causes weight banding.
+  This result is also consistent with AlexNet not showing this banding phenomenon (its final convolution and maxpool produces 6x6x256
+    input into a stack of fully connected layers).</p>
+
+  <h3>Average pooling along x-axis only</h3>
+  <p>By averaging out each row of the 7x7 input, the fully connected layer has 7x512 values as its input. The number of
+    parameters in the FC layer is increased 7x. The banding at the last layer seems to go away but clear banding is still
+  visible on layer 5a. Strangely, the banding at 5a is more reminiscent of banding at 5b in the baseline model.</p>
+
+
+  <h3>Other approaches that were attempted</h3>
+  <p>The modifications below were attempted but did not yield notable results. Banding was still present in most of these variants:</p>
+  <ul>
+    <li>Global Average Pooling with learned masks (3, 5, 16 masks)</li>
+    <li>Attention instead of pooling/FC combination</li>
+    <li>Spatial FiLM (expand more)</li>
+    <li>Adding CoordConv<d-cite key="COORDCONV"></d-cite> channels to the input of 5a and 5b.</li>
+    <li>Splitting the output of 5b into 16 7x7x32 channel groups and feeding each group its own FC layer. The output of the 16 FC layers is concatenated into the input of the final 1001 class FC layer</li>
+    <li>max pool, 4096 unit FC layer, then 1001 unit FC (inspired by VGG)</li>
+  </ul>
+
+  <h2>Types of banding across experiments</h2>
+  <p>To explore how layer weights are affected by the various attempts to affect banding, we clustered a normalized form
+    of the weights in the experiments discussed above. You can explore how the proportion of banding changes with the various
+    experiments above.</p>
+  <figure class="subgrid">
+    <div class="l-body">
+      [FIGURE PLACEHOLDER: interactive clustering visualization with banding examples across experiments]
+    </div>
+  </figure>
+
+  <h2>Open questions</h2>
+  <p>The following experiments were discussed in various conversations but have not been run at this time:</p>
+  <ul>
+    <li>Using x-pooling and y-pooling together before the FC layer to present a lossy form of spatial positions to the FC layer. (Alec's suggestion)</li>
+    <li>Rotating the input randomly act as a regularization technique to induce no banding? (it would likely work but hurt performance)</li>
+  </ul>
+
+
+  <hr><hr><hr>
   <figure class="subgrid">
     <figcaption style="grid-column: kicker">
       <!-- <span class="figure-number">Figure 1:</span> -->

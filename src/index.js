@@ -11,3 +11,14 @@ const visualTOC = new VisualTOC({target: tocNav});
 //     const styleTransferExamples = new StyleTransferExamples({target: figure});
 //   });
 // }
+
+
+const weightBandingExamples = document.getElementsByClassName('weight-banding-example');
+for (let bandingExample of weightBandingExamples) {
+    let image = bandingExample.getElementsByTagName('IMG')[0];
+    let link = document.createElement('a');
+    link.href = image.src;
+    link.target = '_blank';
+    image.parentElement.insertBefore(link, image);
+    link.appendChild(image);
+}

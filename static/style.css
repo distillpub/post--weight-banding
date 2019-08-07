@@ -39,3 +39,33 @@ d-figure > figure {
   top: 26px;
   left: -48px;
 }
+
+#simplified-network-diagram ul {
+  font-size: x-small;
+}
+
+#simplified-network-diagram li {
+  margin: 1px;
+}
+
+div.weight-banding-example {
+  float: left;
+}
+
+div.weight-banding-example a {
+  text-decoration: none;
+  border: none;
+}
+
+
+div.weight-banding-example img {
+  width: 100%;
+}
+
+div.weight-banding-example span.label {
+  width: 100%;
+  text-align: center;
+  clear: both;
+  display: block;
+  font-size: smaller;
+}
