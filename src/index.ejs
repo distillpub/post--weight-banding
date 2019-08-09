@@ -57,16 +57,16 @@
     </figcaption>
     <div class="l-body">
       <div class="weight-banding-example" style="width: 30%">
-        <img src="images/modelzoo_inceptionv1_mixed5b.png" />
+        <ReducedWeights weights_url="diagrams/reduced_weights/InceptionV1_-_modelzoo-mixed5b_5x5_w.json"></ReducedWeights>
         <span class="label">InceptionV1<br />mixed 5b</span>
       </div>
       <div class="weight-banding-example" style="width: 30%">
-        <img src="images/modelzoo_resnet50_block4_unit_3.png" />
-        <span class="label">ResNet50<br />block 4 unit 3 (partial)</span>
+        <ReducedWeights weights_url="diagrams/reduced_weights/ResNet50_-_modelzoo-resnet_v2_50%2Fblock4%2Funit_3%2Fbottleneck_v2%2Fconv2%2Fweights%2Fread.json"></ReducedWeights>
+        <span class="label">ResNet50<br />block 4 unit 3</span>
       </div>
       <div class="weight-banding-example" style="width: 30%">
-        <img src="images/modelzoo_vgg19_conv5.png" />
-        <span class="label">VGG19<br />conv5 (partial)</span>
+        <ReducedWeights weights_url="diagrams/reduced_weights/VGG19_-_modelzoo-conv5_3%2Fweights%2Fread.json"></ReducedWeights>
+        <span class="label">VGG19<br />conv5</span>
       </div>
     </div>
   </figure>
@@ -90,8 +90,8 @@
       <span>AlexNet does not have a pooling operation before its fully connected layers and does not show banding at its last convolutional layer.</span>
     </figcaption>
     <div class="l-body">
-      <div class="weight-banding-example" style="width: 60%">
-        <img src="images/modelzoo_alexnet_conv5.png" />
+      <div class="weight-banding-example">
+        <ReducedWeights weights_url="diagrams/reduced_weights/AlexNet_-_modelzoo-conv5%2Fweights%2Fread.json" num_to_show="96"></ReducedWeights>
         <span class="label">AlexNet<br />conv5</span>
       </div>
     </div>

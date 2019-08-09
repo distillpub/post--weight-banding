@@ -40,19 +40,3 @@ const visualTOC = new VisualTOC({target: tocNav});
   }
 
 }
-
-
-
-// total hack, remove once all weight collections use the ReducedWeight widget
-const weightBandingExamples = document.getElementsByClassName('weight-banding-example');
-for (let bandingExample of weightBandingExamples) {
-    let images = bandingExample.getElementsByTagName('IMG');
-    if (images.length == 1) {
-        const image = images[0];
-        let link = document.createElement('a');
-        link.href = image.src;
-        link.target = '_blank';
-        image.parentElement.insertBefore(link, image);
-        link.appendChild(image);
-    }
-}
