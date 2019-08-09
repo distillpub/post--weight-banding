@@ -1,0 +1,109 @@
+<div class="clusters">
+    # Clusters: <input type="range" bind:value=n_clusters min={n_clusters_min} max={n_clusters_max}>
+    {#if clusters}
+    <span>{n_clusters}</span>
+    <table>
+        <thead>
+        <tr>
+            <th>Experiment</th>
+            {#each clusters.cluster_sort_order as _, cluster_index}
+            <th>{@html clusters.center_images[cluster_index]}</th>
+            {/each}
+        </tr>
+        </thead>
+        <tbody>
+        {#each model_layers as model_layer, layer_index}
+        <tr>
+            <td>{model_layer.pretty_name}</td>
+            {#each clusters.cluster_sort_order as _, cluster_index}
+            <td class="cluster" style="background: rgba(0, 255, 0, {cluster_percentage(clusters, layer_index, cluster_index)})">{cluster_percentage(clusters, layer_index, cluster_index, true)}</td>
+            {/each}
+        </tr>
+        {/each}
+        </tbody>
+    </table>
+    {/if}
+</div>
+
+
+<style>
+
+</style>
+
+<script>
+    function range(n){
+        return Array(n).fill().map((_, i) => i);
+    }
+
+    function cluster_percentage(clusters, layer_index, cluster_index, convert_to_100=false) {
+        let all_assignments = clusters['cluster_assignments'][layer_index];
+        let my_assignments = all_assignments.filter(assigned_index => assigned_index == cluster_index);
+        if (convert_to_100) {
+            return Math.round(my_assignments.length / all_assignments.length * 1000) / 10;
+        } else {
+            return Math.round(my_assignments.length / all_assignments.length * 1000) / 1000;
+        }
+
+    }
+
+    export default {
+        data () {
+            return {
+                model_layers_url: "",
+                image_url: "none",
+                model_layers: [],
+                n_clusters: 4,
+                n_clusters_min: 4,
+                n_clusters_max: 4,
+                cluster_path_prefix: null,
+                clustering_type: "kmeans",
+                clusters: null,
+            };
+        },
+        computed: {
+
+        },
+        helpers: {range, cluster_percentage},
+        oncreate() {
+            this.on('update', ({ changed, current, previous }) => {
+                console.log('update', changed, current, previous);
+                const { model_layers } = this.get();
+
+                if (!model_layers.length || changed['model_layers_url']) {
+                    this.refresh_model_layers();
+                }
+                if (changed['n_clusters']) {
+                    this.load_clusters();
+                }
+        });
+        },
+        methods: {
+            refresh_model_layers: function () {
+                const { model_layers_url } = this.get();
+                if (!model_layers_url) {
+                    console.warn('skipping refresh_model_layers because model_layers_url is null');
+                    return;
+                }
+
+                fetch(model_layers_url)
+                    .then(res => res.json())
+                .then(data => {
+                        this.set({model_layers: data})
+                    });
+            },
+            load_clusters: function () {
+                const { cluster_path_prefix, clustering_type, n_clusters } = this.get();
+                if (!cluster_path_prefix) {
+                    console.warn('skipping load clusters because cluster_path_prefix is null');
+                    return;
+                }
+                let url = cluster_path_prefix + '/cluster_assignment_' + clustering_type + '_n_clusters_' + n_clusters + '.json';
+                fetch(url)
+                    .then(res => res.json())
+            .then(data => {
+                    this.set({clusters: data})
+                });
+            },
+        }
+    };
+</script>

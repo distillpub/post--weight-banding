@@ -1,0 +1,79 @@
+<div class="reduced_weights">
+    {#if all_weights}
+        <span>
+        {#each all_weights.slice(0, (show_overflow ? all_weights.length : num_to_show)) as weight_entry, weight_index}
+            {@html weight_entry}
+        {/each}
+        </span>
+        {#if all_weights.length > num_to_show}
+        <span class="expand_widget" on:click="set({ show_overflow: !show_overflow })">
+            {#if show_overflow}
+            <span>click to hide</span>
+            {:else}
+            <span>{all_weights.length - num_to_show} weights hidden</span>
+            {/if}
+        </span>
+        {/if}
+    {/if}
+</div>
+
+
+<style>
+.expand_widget {
+    cursor: pointer;
+    font-size: smaller;
+    opacity: 0.5;
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+.reduced_weights :global(img) {
+    padding-right: 1px;
+}
+.overflow_weights {
+    padding: 0px;
+    margin: 0px;
+}
+</style>
+
+<script>
+    export default {
+        data () {
+            return {
+                weights_url: null,
+                model_name: null,
+                layer: null,
+                reduced_weights: null,
+                all_weights: null,
+                num_to_show: 42,
+                show_overflow: false,
+            };
+        },
+        computed: {
+            overflow_display_type: ({show_overflow}) => (show_overflow ? 'inline': 'none'),
+        },
+        oncreate() {
+            this.on('update', ({ changed, current, previous }) => {
+                // console.log('reduced weights update', changed, current, previous);
+            const { weights_url } = this.get();
+
+            if (changed['weights_url'] && weights_url) {
+                fetch(weights_url)
+                .then(res => res.json())
+                .then(data => {
+                    this.set(data);
+                    const { reduced_weights } = this.get();
+                    let all_weights = Array();
+                    for (let row of reduced_weights) {
+                        Array.prototype.push.apply(all_weights, row);
+                    }
+                    this.set({all_weights: all_weights});
+                });
+            }
+        });
+        },
+        methods: {
+
+        }
+    };
+</script>
