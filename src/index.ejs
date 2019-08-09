@@ -278,7 +278,6 @@
   </figure>
 
   <h3>VGG19</h3>
-  <p>VGG19 did not seem to respond to removing the pooling operation before its set of fully connected layers. Its later</p>
   <figure class="subgrid">
     <figcaption style="grid-column: kicker">
       <!-- <span class="figure-number">Figure 1:</span> -->
@@ -299,6 +298,9 @@
       </div>
     </div>
   </figure>
+  <p>VGG19 did not seem to respond to the removal of the pooling operation before its set of fully connected layers as expected. It clearly responds to rotation
+    but otherwise the weights look fairly similar between baseline and fully connected removed.
+    [TODO: I should rerun the experiment, I had memory trouble training the fully connected variant already so perhaps there is a bug somewhere]</p>
 
 
 
