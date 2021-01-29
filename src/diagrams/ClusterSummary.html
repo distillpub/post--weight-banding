@@ -93,7 +93,7 @@
             },
             load_clusters: function () {
                 const { cluster_path_prefix, clustering_type, n_clusters } = this.get();
-                if (!cluster_path_prefix) {
+                if (cluster_path_prefix === null) {
                     console.warn('skipping load clusters because cluster_path_prefix is null');
                     return;
                 }
