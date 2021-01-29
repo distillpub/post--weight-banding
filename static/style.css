@@ -1,6 +1,6 @@
 .subgrid {
-  grid-column: screen; 
-  display: grid; 
+  grid-column: screen;
+  display: grid;
   grid-template-columns: inherit;
   grid-template-rows: inherit;
   grid-column-gap: inherit;
@@ -23,6 +23,17 @@ d-figure {
 d-figure > figure {
   margin-top: 0;
   margin-bottom: 0;
+}
+
+figure > svg text, figure > svg tspan {
+  font-family: Arial, sans-serif;
+  font-size: 27.5px;
+  --font: normal 27.5px sans-serif;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+figure > svg text[font-weight=bold], figure > svg text[font-weight=bold] tspan {
+  font-size: 26px;
 }
 
 .shaded-figure {
@@ -68,4 +79,23 @@ div.weight-banding-example span.label {
   clear: both;
   display: block;
   font-size: smaller;
+}
+
+a.figure-number::before {
+	content: "Figure ";
+}
+
+a.figure-number,
+a.section-number {
+	border-bottom-color: hsla(206, 90%, 20%, 0.3);
+	text-transform: uppercase;
+	font-size: 0.85em;
+	color: hsla(206, 90%, 20%, 0.7);
+}
+
+a.figure-number:hover,
+a.section-number:hover {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: hsla(206, 90%, 20%, 0.7);
 }
