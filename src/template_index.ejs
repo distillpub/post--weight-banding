@@ -70,21 +70,30 @@
     <h2 style="display: none;">Introduction</h2>
 
     <p>
-      Open up any ImageNet convnet and look at the weights in the last layer. You’ll find a uniform spatial pattern to them, dramatically unlike anything we see elsewhere in the network. No individual weight is unusual, but the uniformity is so striking that when we first discovered it we thought it must be a bug. Just as different biological tissue types jump out as distinct under a microscope, the weights in this final layer jump out as distinct when visualized with NMF. We call this phenomenon <i>weight banding</i>.
+      Open up any ImageNet conv net and look at the weights in the last layer. You’ll find a uniform spatial pattern to them, dramatically unlike anything we see elsewhere in the network. No individual weight is unusual, but the uniformity is so striking that when we first discovered it we thought it must be a bug. Just as different biological tissue types jump out as distinct under a microscope, the weights in this final layer jump out as distinct when visualized with NMF. We call this phenomenon <i>weight banding</i>.
     </p>
 
     <figure id="figure-1" style="grid-column-start: page-start; grid-column-end: page-end;">
       {diagrams/Intro_Figure}
       <figcaption class="figcaption"class="figcaption l-body">
         <p>
-          <a href="#figure-1" class="figure-number">1</a>. When visualized with <a href="https://drafts.distill.pub/distillpub/post--circuits-visualizing-weights#one-simple-trick">NMF</a>, the weight banding in layer <code>mixed_5b</code> is as visually striking compared to any other layer in InceptionV1 (here shown: <code>mixed_3a</code>) as the smooth, regular striation of muscle tissue is when compared to any other tissue (here shown: cardiac muscle tissue<d-cite bibtex-key="wikitissue2"></d-cite> and epithelial tissue<d-cite bibtex-key="wikitissue1"></d-cite>).
+          <a href="#figure-1" class="figure-number">1</a>. When <a href="https://drafts.distill.pub/distillpub/post--circuits-visualizing-weights#one-simple-trick">visualized with NMF</a>, the weight banding in layer <code>mixed_5b</code> is as visually striking compared to any other layer in InceptionV1 (here shown: <code>mixed_3a</code>) as the smooth, regular striation of muscle tissue is when compared to any other tissue (here shown: cardiac muscle tissue<d-cite bibtex-key="wikitissue2"></d-cite> and epithelial tissue<d-cite bibtex-key="wikitissue1"></d-cite>).
         </p>
       </figcaption>
     </figure>
 
     <p>
-      So far, the <a href="https://distill.pub/2020/circuits/">Circuits thread</a> has mostly focused on studying very small pieces of neural network – <a href="https://distill.pub/2020/circuits/early-vision/">individual neurons</a> and small circuits. In contrast, weight banding is an example of what we call a “structural phenomenon,” a larger-scale pattern in the circuits and features of a neural network. Other examples of structural phenomena are the recurring symmetries we see in <a href="https://distill.pub/2020/circuits/equivariance/">equivariance</a> motifs and the chunks of specialized neural network we see in <a href="https://distill.pub/2020/circuits/branch-specialization/">branch specialization</a>. In the case of weight banding, we think of it as a structural phenomenon because the pattern appears at the scale of an entire layer.
+      So far, the <a href="https://distill.pub/2020/circuits/">Circuits thread</a> has mostly focused on studying very small pieces of neural network – <a href="https://distill.pub/2020/circuits/early-vision/">individual neurons</a> and small circuits. In contrast, weight banding is an example of what we call a “structural phenomenon,” a larger-scale pattern in the circuits and features of a neural network. Other examples of structural phenomena are the recurring symmetries we see in <a href="https://distill.pub/2020/circuits/equivariance/">equivariance</a> motifs and the chunks of specialized neural network we see in <a href="https://distill.pub/2020/circuits/branch-specialization/">branch specialization</a>.
+
+      In the case of weight banding, we think of it as a structural phenomenon because the pattern appears at the scale of an entire layer.
+
     </p>
+    <aside>
+      <p>
+        Weight banding also seems similar in flavor to the <a href="https://distill.pub/2016/deconv-checkerboard/">checkerboard artifacts</a><d-cite bibtex-key="odena2016deconvolution"></d-cite> that form during deconvolution.
+      </p>
+    </aside>
+
 
     <p>
       In addition to describing weight banding, we’ll explore when and why it occurs. We find that there appears to be a causal link between whether a model uses global average pooling or fully connected layers at the end, suggesting that weight banding is part of an algorithm for preserving information about larger scale structure in images. Establishing causal links like this is a step towards closing the loop between practical decisions in training neural networks and the phenomena we observe inside them.
@@ -94,10 +103,11 @@
     <h2>Where weight banding occurs</h2>
 
     <p>
-      Weight banding appears as horizontal bands within layer weights at the end of a variety of common vision models. The bands are visible when neurons are
-      visualized using NMF dimensionality reduction into the RGB space. Some amount of banding in some neurons is expected, but we
-      were surprised to find it to be the common dominant pattern at the later
-      layers within many common networks.
+      Weight banding consistently forms in the final convolutional layer of vision models with global average pooling.
+    </p>
+
+    <p>
+      In order to see the bands, we need to visualize the spatial structure of the weights, as shown below. We typically do this using NMF, <a href="https://drafts.distill.pub/distillpub/post--circuits-visualizing-weights/#one-simple-trick">as described in</a> Visualizing Weights. For each neuron, we take the weights connecting it to the previous layer. We then use NMF to reduce the number of dimensions corresponding to channels in the previous layer down to 3 factors, which we can map to RGB channels. Since which factor is which is arbitrary, we use a heuristic to make the mapping consistent across neurons. This reveals a very prominent pattern of horizontal stripes.
     </p>
 
     <figure id="figure-2" class="subgrid">
@@ -163,16 +173,25 @@
     </figure>
 
     <p>
-      Whereas common networks typically include a pooling operation between their last convolutional layer and a final fully connected or linear layer, AlexNet does <i>not</i> include a final pooling operation, and the final input to its group of fully connected layers is 6x6x256.
+      Unlike most modern vision models, AlexNet does not use global average pooling. Instead, it has a fully connected layer directly connect to its final convolutional layer, allowing it to treat different positions differently. If one looks at the weights of this fully connected layer, the weights strongly vary as a function of the global y position.
     </p>
     <p>
-      Banding implies a preference for neurons to vertically track the input features layer to layer. Our hypothesis is that weight banding is a learned way to preserve spatial information as it gets lost through various pooling operations. To test this, we construct our own simplified vision network and investigate variations on its architecture in order to understand exactly which conditions are necessary to produce weight banding.
+      The horizontal stripes in weight banding mean that the filters don’t care about horizontal position, but are strongly encoding relative vertical position. Our hypothesis is that weight banding is a learned way to preserve spatial information as it gets lost through various pooling operations.
+    </p>
+    <p>
+      In the next section, we will construct our own simplified vision network and investigate variations on its architecture in order to understand exactly which conditions are necessary to produce weight banding.
     </p>
 
-    <h2>Method of study</h2>
+    <h2>What affects banding</h2>
 
     <p>
-      To study the phenomenon of weight banding, we used a simplified network architecture compared to Inception, ResNet, or VGG. In our architecture there are 6 groups of convolutions, separated by L2 pooling layers. At the end, there is a global average pooling operation that reduces the input to 512 values that are then fed to a fully connected layer with 1001 outputs.
+      We'd like to understand which architectural decisions affect weight banding. This will involve trying out different architectures and seeing whether weight banding persists.
+
+      Since we will only want to change a single architectural parameter at a time, we will need a consistent baseline to apply our modications to. Ideally, this baseline would be as simple as possible.
+    </p>
+    <p>
+      We created a simplified network architecture with 6 groups of convolutions, separated by L2 pooling layers. At the end, it has a global average pooling operation that reduces the input to 512 values that are then fed to a fully connected layer with 1001 outputs.
+      <!-- To study the phenomenon of weight banding, we used a simplified network architecture compared to Inception, ResNet, or VGG. In our architecture there are 6 groups of convolutions, separated by L2 pooling layers. At the end, there is a global average pooling operation that reduces the input to 512 values that are then fed to a fully connected layer with 1001 outputs. -->
     </p>
 
     <figure id="figure-4" class="subgrid">
@@ -208,11 +227,10 @@
     </figure>
 
     <p>
-      Most of our investigation focuses on trying different alterations to
-      the end of this network around layers <code>5a</code>, <code>5b</code>, and the final fully connected layer. How does the weight banding phenomenon change as we try various different techniques for preserving spatial information?
-    </p>
+      In the rest of this section, we'll experiment with modifying this architecture and its training settings and seeing if weight banding is preserved.
 
-    <h2>What affects banding</h2>
+      <!-- In particular, we'll explore other techniques for preserving spatial information. -->
+    </p>
 
     <h3>Rotating images 90 degrees</h3>
     <p>
@@ -235,10 +253,10 @@
       </div>
     </figure>
 
-    <h3>Fully connected layer without pooling</h3>
+    <h3>Fully connected layer without global average pooling</h3>
 
     <p>
-      We remove the global average pooling step in our simplified model, allowing the fully connected layer to see all 7x7x512 inputs at once. This model did <strong>not</strong> exhibit weight banding, but used 49x more parameters in the fully connected layer and overfit to the training set. This is pretty strong evidence that the use of aggressive pooling after the last convolutions in common models causes weight banding. This result is also consistent with AlexNet not showing this banding phenomenon (its final convolution and maxpool feed 6x6x256 input into a stack of fully connected layers).
+      We remove the global average pooling step in our simplified model, allowing the fully connected layer to see all spatial positions at once. This model did <strong>not</strong> exhibit weight banding, but used 49x more parameters in the fully connected layer and overfit to the training set. This is pretty strong evidence that the use of aggressive pooling after the last convolutions in common models causes weight banding. This result is also consistent with AlexNet not showing this banding phenomenon (since it also does not have global average pooling).
     </p>
 
     <figure id="figure-7" class="subgrid">
@@ -257,7 +275,7 @@
 
     <h3>Average pooling along x-axis only</h3>
     <p>
-      We average out each row of the 7x7 input, making the fully connected layer have 7x512 values as its input and increasing the number of parameters in the fully connected layer by 7x. The banding at the last layer seems to go away, but clear banding is still visible on layer <code>5a</code>. Strangely, the banding at <code>5a</code> is more reminiscent of banding on the baseline model's <code>5b</code>.
+      We average out each row of the final convolutional layer, so that vertical absolute position is preserved but horizontal absolute position is not.<d-footnote>Since this model has 7x7 spatial positions in the final convolutional layer, this modification increases the number of parameters in the fully connected layer by 7x, but not the 49x of a complete fully connected layer with no pooling at all.</d-footnote> The banding at the last layer seems to go away, but on closer investigation, clear banding is still visible in layer <code>5a</code>, similar to the baseline model's <code>5b</code>. We found this result surprising.
     </p>
 
     <figure id="figure-8" class="subgrid">
@@ -295,66 +313,54 @@
     </p>
     <ul>
       <li>
-        Global average pooling with learned 7x7 masks (using 3, 5, 16 masks)
-        before the results are concatenated and input to the fully connected
-        layer. The masks that were learned were reasonable, but banding was still
-        strongly present.
+        Global average pooling with learned spatial masks. By applying several different spatial masks and global average pooling, we can allow the model to preserve some spatial information. Intuitively, each mask can select for a different subset of spatial positions.
+
+        We tried experimental runs using each of 3, 5, or 16 different masks.
+
+        The masks that were learned corresponded to large-scale global structure, but banding was still strongly present.
       </li>
       <li>
         Using an attention layer instead of pooling/fully connected combination after layer
         <code>5b</code>.
       </li>
-      <li>
+      <!-- <li>
         Adding a 7x7x512 mask with learned weights after <code>5b</code>. The hope was that a
         mask would help each <code>5b</code> neuron focus on the right parts of the 7x7 image
         without a convolution.
-      </li>
+      </li> -->
       <li>
-        Adding CoordConv<d-cite key="COORDCONV"></d-cite> channels to the input
+        Adding CoordConv<d-cite key="COORDCONV"></d-cite> channels to the inputs
         of <code>5a</code> and <code>5b</code>.
       </li>
       <li>
         Splitting the output of <code>5b</code> into 16 7x7x32 channel groups and feeding
         each group its own fully connected layer. The output of the 16 fully connected layers is then
-        concatenated into the input of the final 1001 class fully connected layer.
+        concatenated into the input of the final 1001-class fully connected layer.
       </li>
-      <li>
-        Using a global max pool, 4096 unit fully connected layer, then 1001 unit fully connected layer (inspired
+      <!-- <li>
+        Using a global max pool, 4096-unit fully connected layer, then 1001-unit fully connected layer (inspired
         by VGG).
-      </li>
+      </li> -->
     </ul>
 
-    <h2>Types of banding across experiments</h2>
     <p>
-      To explore how layer weights are affected by the various attempts to
-      affect banding, we clustered a normalized form of the weights in the
-      experiments discussed above. You can explore how the proportion and type
-      of banding changes with the various experiments above.
-    </p>
-    <figure class="subgrid" id="figure-9" style="overflow-x: auto;">
-      <figcaption class="figcaption l-body" style="grid-column: kicker">
-        <p>
-          <a href="#figure-9" class="figure-number">9</a>.
-        </p>
-      </figcaption>
-      <div class="l-body">
-        <div id="clusters-summary-container"></div>
-      </div>
-    </figure>
+      An interactive diagram allowing you to explore the weights for these experiments and more can be found in the <a href="#figure-12">appendix</a>.
+
 
     <h2>Confirming banding interventions in common architectures</h2>
     <p>
-      To confirm the two clear interventions that affected banding in the
-      simplified model, we decided to make the same modifications to three
+      In the previous section, we observed two interventions that clearly affected weight banding: rotating the dataset by 90º and removing the global average pooling before the fully connected layer.
+      To confirm that these effects hold beyond our simplified model, we decided to make the same interventions to three
       common architectures (InceptionV1, ResNet50, VGG19) and train them from
-      scratch. We trained one variant with 90º rotation and one variant
-      with pooling removed before the fully connected layer.
+      scratch.
     </p>
 
-    <h3>InceptionV1</h3>
-    <figure class="subgrid" id="figure-10">
+    <p>With one exception, the effect holds in all three models.</p>
+
+    <h4>InceptionV1</h4>
+    <figure class="subgrid" id="figure-9">
       <figcaption class="figcaption" style="grid-column: kicker">
-        <span><a href="#figure-10" class="figure-number">10</a>. Inception V1, layer <code>mixed_5c</code>, 5x5 convolution</span>
+        <span><a href="#figure-9" class="figure-number">9</a>. Inception V1, layer <code>mixed_5c</code>, 5x5 convolution</span>
       </figcaption>
       <div class="l-body">
         <div class="weight-banding-example" style="width: 30%">
@@ -378,11 +384,11 @@
       </div>
     </figure>
 
-    <h3>ResNet50</h3>
-    <figure class="subgrid" id="figure-11">
+    <h4>ResNet50</h4>
+    <figure class="subgrid" id="figure-10">
       <figcaption class="figcaption"style="grid-column: kicker">
         <!-- <span class="figure-number">1:</span> -->
-        <span><a href="#figure-11" class="figure-number">11</a>. ResNet50, last 3x3 convolutional layer</span>
+        <span><a href="#figure-10" class="figure-number">10</a>. ResNet50, last 3x3 convolutional layer</span>
       </figcaption>
       <div class="l-body">
         <div class="weight-banding-example" style="width: 30%">
@@ -406,11 +412,11 @@
       </div>
     </figure>
 
-    <h3>VGG19</h3>
-    <figure class="subgrid" id="figure-12">
+    <h4>VGG19</h4>
+    <figure class="subgrid" id="figure-11">
       <figcaption class="figcaption"style="grid-column: kicker">
         <!-- <span class="figure-number">1:</span> -->
-        <span><a href="#figure-12" class="figure-number">12</a>. VGG19, last 3x3 convolutional layer.</span>
+        <span><a href="#figure-11" class="figure-number">11</a>. VGG19, last 3x3 convolutional layer.</span>
       </figcaption>
       <div class="l-body">
         <div class="weight-banding-example" style="width: 30%">
@@ -433,44 +439,89 @@
         </div>
       </div>
     </figure>
+
     <p>
+      The one exception is VGG19, where the removal of the pooling operation before its set of fully connected layers did not eliminate weight banding as expected; these weights look fairly similar to the baseline. However, it clearly responds to rotation.
+    </p>
+    <!-- <p>
       VGG19 did not seem to respond to the removal of the pooling operation
       before its set of fully connected layers as expected. It clearly responds
       to rotation but otherwise the weights look fairly similar between baseline
-      and fully connected removed. <!--[TODO: I should rerun the experiment, I had
+      and fully connected removed. [TODO: I should rerun the experiment, I had
       memory trouble training the fully connected variant already so perhaps
-      there is a bug somewhere]-->
+      there is a bug somewhere]
+    </p> -->
+
+    <h2>Conclusion</h2>
+    <p>
+      If we really understand neural networks, one would expect us to be able to leverage that understanding to design more effective neural networks architectures. Early papers, like Zeiler et al<d-cite bibtex-key="zeiler2014visualizing"></d-cite>, emphasized this quite strongly, but it’s unclear whether there have yet been any significant successes in doing this. This hints at significant limitations in our work. It may also be a missed opportunity: it seems likely that if interpretability was useful in advancing neural network capabilities, it would become more integrated into other research and get attention from a wider range of researchers.
+    </p>
+    <p>
+      It’s unclear whether there is any sense in which weight banding is “good” or “bad.”<d-footnote>On one hand, the 90º rotation experiment shows that weight banding is a product of the dataset and is encoding useful information into the weights. However, if spatial information could flow through the network in a different, more efficient way, then perhaps the channels would be able to focus on encoding relationships between features without needing to track spatial positions.</d-footnote> We don’t have any recommendation or action to take away from it. But it is an example of a consistent link between architecture decisions and neural network architecture. It has the right sort of flavor for something that could inform architectural design, even if it isn’t particularly actionable itself.
+    </p>
+    <p>
+      More generally, weight banding is an example of a large-scale structure. One of the major limitations of circuits has been how small-scale it is. We’re hopeful that larger scale structures like weight banding may help circuits form a higher-level story of neural networks.
     </p>
 
-    <h2>Conclusions</h2>
-    <p>
+    <!-- <p>
       Ultimately the two interventions that clearly affected the amount or type
       of banding were 90º rotation and skipping the final pooling
       operation. The 90º rotation intervention can be an easy to implement
       test for spatial banding in your dataset. Skipping the pooling operation
       is a more impactful intervention but is not recommended since it
       significantly increases parameter counts and overfit in our tests.
-    </p>
+    </p> -->
 
-    <p>
+    <!-- <p>
       It's unclear if weight banding is a feature or a bug. On one hand, the 90º rotation experiment shows that weight banding is a product of the
       dataset and is encoding useful information into the weights. However, if
-      spatial information can flow through the network in a more efficient way -
+      spatial information can flow through the network in a more efficient way,
       then perhaps the filters can focus on encoding relationships between
-      features without needing to track spatial positions. The most interesting
+      features without needing to track these spatial positions. The most interesting
       finding about this phenomenon is that convolutional layers will very
       consistently add banding into their weights whenever spatial information
       gets destroyed through pooling operations, presumably with the goal of
       preserving some of the destroyed information.
-    </p>
+    </p> -->
 
-    <p>
+    <!-- <p>
       Currently, it seems that weight banding is a consistent phenomenon that
       emerges from combinations of convolutions and pooling and we hope to
       explore it further in the future.
+    </p> -->
+  </d-article>
+
+  <d-appendix>
+    <h3>Technical Notes</h3>
+    <h4>Training the simplified network</h4>
+    <p>
+      The simplified network used to study this phenomenon was trained on
+      Imagenet (1.2 million images) for 90 epochs. Training was done on 8 GPUs
+      with a global batch size of 512 for the first 30 epochs and 1024 for the
+      remaining 60 epochs. The network was built using TF-Slim. Batch norm was
+      used on convolutional layers and fully connected layers, except for the
+      last fully connected layer with 1001 outputs.
     </p>
 
-    <h3>Follow up experiment ideas</h3>
+    <h4>Types of banding across experiments</h4>
+    <p>
+      To explore how layer weights are affected by the various attempts to
+      affect banding, we clustered a normalized form of the weights in the
+      experiments discussed above. You can explore how the proportion and type
+      of banding changes with the various experiments above.
+    </p>
+    <figure class="subgrid" id="figure-12" style="overflow-x: auto;">
+      <figcaption class="figcaption l-body" style="grid-column: kicker">
+        <p>
+          <a href="#figure-12" class="figure-number">12</a>.
+        </p>
+      </figcaption>
+      <div class="l-body">
+        <div id="clusters-summary-container"></div>
+      </div>
+    </figure>
+
+    <h4>Follow up experiment ideas</h4>
     <p>
       The following experiments were discussed in various conversations but have
       not been run at this time:
@@ -485,19 +536,6 @@
         no banding? (it would likely work but hurt performance)
       </li>
     </ul>
-  </d-article>
-
-  <d-appendix>
-    <h3>Technical Notes</h3>
-    <h4>Training the simplified network</h4>
-    <p>
-      The simplified network used to study this phenomenon was trained on
-      Imagenet (1.2 million images) for 90 epochs. Training was done on 8 GPUs
-      with a global batch size of 512 for the first 30 epochs and 1024 for the
-      remaining 60 epochs. The network was built using TF-Slim. Batch norm was
-      used on convolutional layers and fully connected layers, except for the
-      last fully connected layer with 1001 outputs.
-    </p>
 
     <h3>Acknowledgments</h3>
     <p>
