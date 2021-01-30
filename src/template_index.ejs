@@ -87,7 +87,7 @@
     </figure>
 
     <p>
-      So far, the <a href="https://distill.pub/2020/circuits/">Circuits thread</a> has mostly focused on studying very small pieces of neural network – <a href="https://distill.pub/2020/circuits/early-vision/">individual neurons</a> and small circuits. In contrast, weight banding is an example of what we call a “structural phenomenon,” a larger-scale pattern in the circuits and features of a neural network. Other examples of structural phenomena are the recurring symmetries we see in <a href="https://distill.pub/2020/circuits/equivariance/">equivariance</a> motifs and the chunks of specialized neural network we see in <a href="https://distill.pub/2020/circuits/branch-specialization/">branch specialization</a>.
+      So far, the <a href="https://distill.pub/2020/circuits/">Circuits thread</a> has mostly focused on studying very small pieces of neural network – <a href="https://distill.pub/2020/circuits/early-vision/">individual neurons</a> and small circuits. In contrast, weight banding is an example of what we call a “structural phenomenon,” a larger-scale pattern in the circuits and features of a neural network. Other examples of structural phenomena are the recurring symmetries we see in <a href="https://distill.pub/2020/circuits/equivariance/">equivariance</a> motifs and the specialized slices of neural networks we see in <a href="https://distill.pub/2020/circuits/branch-specialization/">branch specialization</a>.
 
       In the case of weight banding, we think of it as a structural phenomenon because the pattern appears at the scale of an entire layer.
 
@@ -177,7 +177,7 @@
     </figure>
 
     <p>
-      Unlike most modern vision models, AlexNet does not use global average pooling. Instead, it has a fully connected layer directly connect to its final convolutional layer, allowing it to treat different positions differently. If one looks at the weights of this fully connected layer, the weights strongly vary as a function of the global y position.
+      Unlike most modern vision models, AlexNet does not use global average pooling. Instead, it has a fully connected layer directly connected to its final convolutional layer, allowing it to treat different positions differently. If one looks at the weights of this fully connected layer, the weights strongly vary as a function of the global y position.
     </p>
     <p>
       The horizontal stripes in weight banding mean that the filters don’t care about horizontal position, but are strongly encoding relative vertical position. Our hypothesis is that weight banding is a learned way to preserve spatial information as it gets lost through various pooling operations.
@@ -191,7 +191,7 @@
     <p>
       We'd like to understand which architectural decisions affect weight banding. This will involve trying out different architectures and seeing whether weight banding persists.
 
-      Since we will only want to change a single architectural parameter at a time, we will need a consistent baseline to apply our modications to. Ideally, this baseline would be as simple as possible.
+      Since we will only want to change a single architectural parameter at a time, we will need a consistent baseline to apply our modifications to. Ideally, this baseline would be as simple as possible.
     </p>
     <p>
       We created a simplified network architecture with 6 groups of convolutions, separated by L2 pooling layers. At the end, it has a global average pooling operation that reduces the input to 512 values that are then fed to a fully connected layer with 1001 outputs.
@@ -536,7 +536,7 @@
         lossy form of spatial positions to the fully connected layer. (Alec Radford's suggestion)
       </li>
       <li>
-        Rotating the input randomly act as a regularization technique to induce
+        Rotating the input randomly acts as a regularization technique to induce
         no banding? (it would likely work but hurt performance)
       </li>
     </ul>

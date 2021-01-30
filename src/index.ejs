@@ -14,7 +14,7 @@
     <script type="text/json">
       {
         "title": "Adventures in Weight Banding",
-        "description": "An example project using webpack and svelte-loader and ejs to inline SVGs",
+        "description": "Weights in the final layer of common visual models appear as horizontal bands. We investigate how and why.",
         "password": "weights",
         "authors": [
           {
@@ -105,10 +105,10 @@
 <pattern id="patternIntro_Figure3" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#imageIntro_Figure3" transform="scale(0.00169779 0.00215983)" class='pixelated' />
 </pattern>
-<image id="imageIntro_Figure0" width="1962" height="1492" xlink:href="generated_images/a197b2b1b6d7ffe.png" class='pixelated' />
-<image id="imageIntro_Figure1" width="1600" height="902" xlink:href="generated_images/46877bd96877371.png" class='pixelated' />
-<image id="imageIntro_Figure2" width="589" height="463" xlink:href="generated_images/22b8014aa1a0fe6.png" class='pixelated' />
-<image id="imageIntro_Figure3" width="589" height="463" xlink:href="generated_images/af59ab980ac8de.png" class='pixelated' />
+<image id="imageIntro_Figure0" width="1962" height="1492" xlink:href="generated_images/cedf03d2f12e179.png" class='pixelated' />
+<image id="imageIntro_Figure1" width="1600" height="902" xlink:href="generated_images/6f429a26336870.png" class='pixelated' />
+<image id="imageIntro_Figure2" width="589" height="463" xlink:href="generated_images/f731b7298ad6882.png" class='pixelated' />
+<image id="imageIntro_Figure3" width="589" height="463" xlink:href="generated_images/3a1dd1d9f6df672.png" class='pixelated' />
 </defs>
 </svg>
 
@@ -120,7 +120,7 @@
     </figure>
 
     <p>
-      So far, the <a href="https://distill.pub/2020/circuits/">Circuits thread</a> has mostly focused on studying very small pieces of neural network – <a href="https://distill.pub/2020/circuits/early-vision/">individual neurons</a> and small circuits. In contrast, weight banding is an example of what we call a “structural phenomenon,” a larger-scale pattern in the circuits and features of a neural network. Other examples of structural phenomena are the recurring symmetries we see in <a href="https://distill.pub/2020/circuits/equivariance/">equivariance</a> motifs and the chunks of specialized neural network we see in <a href="https://distill.pub/2020/circuits/branch-specialization/">branch specialization</a>.
+      So far, the <a href="https://distill.pub/2020/circuits/">Circuits thread</a> has mostly focused on studying very small pieces of neural network – <a href="https://distill.pub/2020/circuits/early-vision/">individual neurons</a> and small circuits. In contrast, weight banding is an example of what we call a “structural phenomenon,” a larger-scale pattern in the circuits and features of a neural network. Other examples of structural phenomena are the recurring symmetries we see in <a href="https://distill.pub/2020/circuits/equivariance/">equivariance</a> motifs and the specialized slices of neural networks we see in <a href="https://distill.pub/2020/circuits/branch-specialization/">branch specialization</a>.
 
       In the case of weight banding, we think of it as a structural phenomenon because the pattern appears at the scale of an entire layer.
 
@@ -210,7 +210,7 @@
     </figure>
 
     <p>
-      Unlike most modern vision models, AlexNet does not use global average pooling. Instead, it has a fully connected layer directly connect to its final convolutional layer, allowing it to treat different positions differently. If one looks at the weights of this fully connected layer, the weights strongly vary as a function of the global y position.
+      Unlike most modern vision models, AlexNet does not use global average pooling. Instead, it has a fully connected layer directly connected to its final convolutional layer, allowing it to treat different positions differently. If one looks at the weights of this fully connected layer, the weights strongly vary as a function of the global y position.
     </p>
     <p>
       The horizontal stripes in weight banding mean that the filters don’t care about horizontal position, but are strongly encoding relative vertical position. Our hypothesis is that weight banding is a learned way to preserve spatial information as it gets lost through various pooling operations.
@@ -224,7 +224,7 @@
     <p>
       We'd like to understand which architectural decisions affect weight banding. This will involve trying out different architectures and seeing whether weight banding persists.
 
-      Since we will only want to change a single architectural parameter at a time, we will need a consistent baseline to apply our modications to. Ideally, this baseline would be as simple as possible.
+      Since we will only want to change a single architectural parameter at a time, we will need a consistent baseline to apply our modifications to. Ideally, this baseline would be as simple as possible.
     </p>
     <p>
       We created a simplified network architecture with 6 groups of convolutions, separated by L2 pooling layers. At the end, it has a global average pooling operation that reduces the input to 512 values that are then fed to a fully connected layer with 1001 outputs.
@@ -650,18 +650,26 @@
     <ul>
       <li>
         Using x-pooling and y-pooling together before the fully connected layer to present a
-        lossy form of spatial positions to the fully connected layer. (Alec's suggestion)
+        lossy form of spatial positions to the fully connected layer. (Alec Radford's suggestion)
       </li>
       <li>
-        Rotating the input randomly act as a regularization technique to induce
+        Rotating the input randomly acts as a regularization technique to induce
         no banding? (it would likely work but hurt performance)
       </li>
     </ul>
 
-    <h3>Acknowledgments</h3>
+    <h3>Author Contributions</h3>
+
+    <p>As with many scientific collaborations, the contributions are difficult to separate because it was a collaborative effort that we wrote together.</p>
+
+    <p><b>Research.</b> Ludwig Schubert accidentally discovered weight banding, thinking it was a bug. Michael Petrov performed an array of systematic investigations into when it occurs and how architectural decisions affect it. This investigation was done in the context of and informed by collaborative research into circuits by Nick Cammarata, Gabe Goh, Chelsea Voss, Chris Olah, and Ludwig.</p>
+
+    <p><b>Writing and Diagrams.</b> Michael wrote and illustrated a first version of this article. Chelsea improved the text and illustrations, and thought about big picture framing. Chris helped with editing.</p>
+
+    <!-- <h3>Acknowledgments</h3>
     <p>
       We are deeply grateful to...
-    </p>
+    </p> -->
 
     <d-footnote-list></d-footnote-list>
     <d-citation-list></d-citation-list>
