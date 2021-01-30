@@ -14,7 +14,7 @@
     <script type="text/json">
       {
         "title": "Adventures in Weight Banding",
-        "description": "An example project using webpack and svelte-loader and ejs to inline SVGs",
+        "description": "Weights in the final layer of common visual models appear as horizontal bands. We investigate how and why.",
         "password": "weights",
         "authors": [
           {
@@ -28,6 +28,10 @@
             "authorURL": "https://csvoss.com",
             "affiliation": "OpenAI",
             "affiliationURL": "https://openai.com"
+          },
+          {
+            "author": "Ludwig Schubert",
+            "authorURL": "https://schubert.io/"
           },
           {
             "author": "Nick Cammarata",
@@ -529,7 +533,7 @@
     <ul>
       <li>
         Using x-pooling and y-pooling together before the fully connected layer to present a
-        lossy form of spatial positions to the fully connected layer. (Alec's suggestion)
+        lossy form of spatial positions to the fully connected layer. (Alec Radford's suggestion)
       </li>
       <li>
         Rotating the input randomly act as a regularization technique to induce
@@ -537,10 +541,18 @@
       </li>
     </ul>
 
-    <h3>Acknowledgments</h3>
+    <h3>Author Contributions</h3>
+
+    <p>As with many scientific collaborations, the contributions are difficult to separate because it was a collaborative effort that we wrote together.</p>
+
+    <p><b>Research.</b> Ludwig Schubert accidentally discovered weight banding, thinking it was a bug. Michael Petrov performed an array of systematic investigations into when it occurs and how architectural decisions affect it. This investigation was done in the context of and informed by collaborative research into circuits by Nick Cammarata, Gabe Goh, Chelsea Voss, Chris Olah, and Ludwig.</p>
+
+    <p><b>Writing and Diagrams.</b> Michael wrote and illustrated a first version of this article. Chelsea improved the text and illustrations, and thought about big picture framing. Chris helped with editing.</p>
+
+    <!-- <h3>Acknowledgments</h3>
     <p>
       We are deeply grateful to...
-    </p>
+    </p> -->
 
     <d-footnote-list></d-footnote-list>
     <d-citation-list></d-citation-list>
