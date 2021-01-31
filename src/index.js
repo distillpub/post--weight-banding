@@ -14,12 +14,12 @@ const visualTOC = new VisualTOC({target: tocNav});
   const clusterSummary = new ClusterSummary({
       target: figure,
       data: {
-          "model_layers_url": "/banding/model_layer_weights.json",
+          "model_layers_url": "banding/model_layer_weights.json",
           "image_url": "fun image",
           "n_clusters": 4,
           "n_clusters_min": 4,
           "n_clusters_max": 19,
-          "cluster_path_prefix": "/banding",
+          "cluster_path_prefix": "banding",
       }
   });
 
