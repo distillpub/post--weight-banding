@@ -69,6 +69,22 @@ def upscale_image_tag(image_tag: str) -> str:
     return '"'.join([pre, new_mid, post])
 
 
+banding = "static/banding"
+upscaled_banding = "static/upscaled_banding"
+
+for f in os.listdir(banding):
+    if not f.endswith(".json"):
+        continue
+    with open(os.path.join(banding, f), "r") as infi:
+        with open(os.path.join(upscaled_banding, f), "w") as outfi:
+            contents = json.loads(infi.read())
+            if isinstance(contents, list):
+                continue
+            contents["center_images"] = [
+                upscale_image_tag(image_tag) for image_tag in contents["center_images"]
+            ]
+            outfi.write(json.dumps(contents))
+
 for f in os.listdir(reduced_weights):
     if not f.endswith(".json"):
         continue

@@ -19,7 +19,7 @@ const visualTOC = new VisualTOC({target: tocNav});
           "n_clusters": 4,
           "n_clusters_min": 4,
           "n_clusters_max": 19,
-          "cluster_path_prefix": "banding",
+          "cluster_path_prefix": "upscaled_banding",
       }
   });
 
