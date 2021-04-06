@@ -112,10 +112,10 @@
 <pattern id="patternIntro_Figure3" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#imageIntro_Figure3" transform="scale(0.00169779 0.00215983)" class='pixelated' />
 </pattern>
-<image id="imageIntro_Figure0" width="1962" height="1492" xlink:href="generated_images/cedf03d2f12e179.png" class='pixelated' />
-<image id="imageIntro_Figure1" width="1600" height="902" xlink:href="generated_images/6f429a26336870.png" class='pixelated' />
-<image id="imageIntro_Figure2" width="589" height="463" xlink:href="generated_images/f731b7298ad6882.png" class='pixelated' />
-<image id="imageIntro_Figure3" width="589" height="463" xlink:href="generated_images/3a1dd1d9f6df672.png" class='pixelated' />
+<image id="imageIntro_Figure0" width="1962" height="1492" xlink:href="generated_images/fe26c4ecf6104f.png" class='pixelated' />
+<image id="imageIntro_Figure1" width="1600" height="902" xlink:href="generated_images/3098f7d2808197.png" class='pixelated' />
+<image id="imageIntro_Figure2" width="589" height="463" xlink:href="generated_images/9684ecaa42e1f.png" class='pixelated' />
+<image id="imageIntro_Figure3" width="589" height="463" xlink:href="generated_images/1e3ec78d5e3c63.png" class='pixelated' />
 </defs>
 </svg>
 
@@ -151,7 +151,7 @@
     </p>
 
     <p>
-      In order to see the bands, we need to visualize the spatial structure of the weights, as shown below. We typically do this using NMF, <a href="https://drafts.distill.pub/distillpub/post--circuits-visualizing-weights/#one-simple-trick">as described in</a> Visualizing Weights. For each neuron, we take the weights connecting it to the previous layer. We then use NMF to reduce the number of dimensions corresponding to channels in the previous layer down to 3 factors, which we can map to RGB channels. Since which factor is which is arbitrary, we use a heuristic to make the mapping consistent across neurons. This reveals a very prominent pattern of horizontal stripes.
+      In order to see the bands, we need to visualize the spatial structure of the weights, as shown below. We typically do this using NMF, <a href="https://drafts.distill.pub/distillpub/post--circuits-visualizing-weights/#one-simple-trick">as described in</a> Visualizing Weights. For each neuron, we take the weights connecting it to the previous layer. We then use NMF to reduce the number of dimensions corresponding to channels in the previous layer down to 3 factors, which we can map to RGB channels. Since which factor is which is arbitrary, we use a heuristic to make the mapping consistent across neurons. This reveals a very prominent pattern of horizontal<d-footnote>The stripes aren't always perfectly horizontal - sometimes they exhibit a slight preference for extra weight in the center of the central band, as seen in some examples below.</d-footnote> stripes.
     </p>
 
     <figure id="figure-2" class="subgrid">
@@ -166,19 +166,19 @@
       <div class="l-body">
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/InceptionV1_-_modelzoo-mixed5b_5x5_w.json"
+            weights_url="diagrams/upscaled_weights/InceptionV1_-_modelzoo-mixed5b_5x5_w.json"
           ></ReducedWeights>
           <span class="label">InceptionV1<d-cite bibtex-key="szegedy2015going"></d-cite><br />mixed 5b</span>
         </div>
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/ResNet50_-_modelzoo-resnet_v2_50%2Fblock4%2Funit_3%2Fbottleneck_v2%2Fconv2%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/ResNet50_-_modelzoo-resnet_v2_50%2Fblock4%2Funit_3%2Fbottleneck_v2%2Fconv2%2Fweights%2Fread.json"
           ></ReducedWeights>
           <span class="label">ResNet50<d-cite bibtex-key="he2016deep"></d-cite><br />block 4 unit 3</span>
         </div>
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/VGG19_-_modelzoo-conv5_3%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/VGG19_-_modelzoo-conv5_3%2Fweights%2Fread.json"
           ></ReducedWeights>
           <span class="label">VGG19<d-cite bibtex-key="simonyan2014very"></d-cite><br />conv5</span>
         </div>
@@ -208,7 +208,7 @@
       <div class="l-body">
         <div class="weight-banding-example">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/AlexNet_-_modelzoo-conv5%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/AlexNet_-_modelzoo-conv5%2Fweights%2Fread.json"
             num_to_show="96"
           ></ReducedWeights>
           <span class="label">AlexNet<br />conv5</span>
@@ -346,7 +346,7 @@
       <div class="l-body">
         <div class="weight-banding-example">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/Simplified-Base-v0%2Fv1%2F5b%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/Simplified-Base-v0%2Fv1%2F5b%2Fweights%2Fread.json"
             num_to_show="96"
           ></ReducedWeights>
           <span class="label">simplified model (<code>5b</code>), baseline</span>
@@ -373,7 +373,7 @@
       <div class="l-body">
         <div class="weight-banding-example">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/Simplified-90deg-v0%2Fv1%2F5b%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/Simplified-90deg-v0%2Fv1%2F5b%2Fweights%2Fread.json"
             num_to_show="96"
           ></ReducedWeights>
           <span class="label"><a href="#figure-6" class="figure-number">6</a>. simplified model (<code>5b</code>), 90º rotation</span>
@@ -391,7 +391,7 @@
       <div class="l-body">
         <div class="weight-banding-example">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/Simplified-fc-only-v0%2Fv1%2F5b%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/Simplified-fc-only-v0%2Fv1%2F5b%2Fweights%2Fread.json"
             num_to_show="96"
           ></ReducedWeights>
           <span class="label"
@@ -416,7 +416,7 @@
       <div class="l-body" style="margin-bottom: 1.5em;">
         <div class="weight-banding-example" style="width: 48%;">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/Simplified-x-avgpool-v0%2Fv1%2F5a%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/Simplified-x-avgpool-v0%2Fv1%2F5a%2Fweights%2Fread.json"
             num_to_show="96"
           ></ReducedWeights>
           <span class="label"
@@ -425,7 +425,7 @@
         </div>
         <div class="weight-banding-example" style="width: 48%;">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/Simplified-x-avgpool-v0%2Fv1%2F5b%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/Simplified-x-avgpool-v0%2Fv1%2F5b%2Fweights%2Fread.json"
             num_to_show="96"
           ></ReducedWeights>
           <span class="label"
@@ -493,19 +493,19 @@
       <div class="l-body">
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/InceptionV1_-_baseline-v0%2Fv1%2FInceptionV1%2FMixed_5c%2FBranch_2%2FConv2d_0b_5x5%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/InceptionV1_-_baseline-v0%2Fv1%2FInceptionV1%2FMixed_5c%2FBranch_2%2FConv2d_0b_5x5%2Fweights%2Fread.json"
           ></ReducedWeights>
           <span class="label">baseline</span>
         </div>
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/InceptionV1_-_90deg-v0%2Fv1%2FInceptionV1%2FMixed_5c%2FBranch_2%2FConv2d_0b_5x5%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/InceptionV1_-_90deg-v0%2Fv1%2FInceptionV1%2FMixed_5c%2FBranch_2%2FConv2d_0b_5x5%2Fweights%2Fread.json"
           ></ReducedWeights>
           <span class="label">90º rotation</span>
         </div>
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/InceptionV1_-_fc-only-v0%2Fv1%2FInceptionV1%2FMixed_5c%2FBranch_2%2FConv2d_0b_5x5%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/InceptionV1_-_fc-only-v0%2Fv1%2FInceptionV1%2FMixed_5c%2FBranch_2%2FConv2d_0b_5x5%2Fweights%2Fread.json"
           ></ReducedWeights>
           <span class="label">global average pooling layer removed</span>
         </div>
@@ -521,19 +521,19 @@
       <div class="l-body">
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/ResNet50_-_baseline-v0%2Fv1%2Fresnet_model%2Fconv2d_51%2Fkernel%2Fread.json"
+            weights_url="diagrams/upscaled_weights/ResNet50_-_baseline-v0%2Fv1%2Fresnet_model%2Fconv2d_51%2Fkernel%2Fread.json"
           ></ReducedWeights>
           <span class="label">baseline</span>
         </div>
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/ResNet50_-_90deg-v0%2Fv1%2Fresnet_model%2Fconv2d_51%2Fkernel%2Fread.json"
+            weights_url="diagrams/upscaled_weights/ResNet50_-_90deg-v0%2Fv1%2Fresnet_model%2Fconv2d_51%2Fkernel%2Fread.json"
           ></ReducedWeights>
           <span class="label">90º rotation</span>
         </div>
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/ResNet50_-_fc-only-v0%2Fv1%2Fresnet_model%2Fconv2d_51%2Fkernel%2Fread.json"
+            weights_url="diagrams/upscaled_weights/ResNet50_-_fc-only-v0%2Fv1%2Fresnet_model%2Fconv2d_51%2Fkernel%2Fread.json"
           ></ReducedWeights>
           <span class="label">global average pooling layer removed</span>
         </div>
@@ -549,19 +549,19 @@
       <div class="l-body">
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/VGG19_-_baseline-v0%2Fv1%2Fvgg_19%2Fconv5%2Fconv5_4%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/VGG19_-_baseline-v0%2Fv1%2Fvgg_19%2Fconv5%2Fconv5_4%2Fweights%2Fread.json"
           ></ReducedWeights>
           <span class="label">baseline</span>
         </div>
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/VGG19_-_90deg-v0%2Fv1%2Fvgg_19%2Fconv5%2Fconv5_4%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/VGG19_-_90deg-v0%2Fv1%2Fvgg_19%2Fconv5%2Fconv5_4%2Fweights%2Fread.json"
           ></ReducedWeights>
           <span class="label">90º rotation</span>
         </div>
         <div class="weight-banding-example" style="width: 30%">
           <ReducedWeights
-            weights_url="diagrams/reduced_weights/VGG19_-_fc-only-v0%2Fv1%2Fvgg_19%2Fconv5%2Fconv5_4%2Fweights%2Fread.json"
+            weights_url="diagrams/upscaled_weights/VGG19_-_fc-only-v0%2Fv1%2Fvgg_19%2Fconv5%2Fconv5_4%2Fweights%2Fread.json"
           ></ReducedWeights>
           <span class="label">global average pooling layer removed</span>
         </div>
