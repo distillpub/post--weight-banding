@@ -16,7 +16,7 @@
         <tr>
             <td>{model_layer.pretty_name}</td>
             {#each clusters.cluster_sort_order as _, cluster_index}
-            <td class="cluster" style="background: rgba(217, 157, 38, {cluster_percentage(clusters, layer_index, cluster_index)})">{cluster_percentage(clusters, layer_index, cluster_index, true)}</td>
+            <td class="cluster" style="background: rgba(217, 157, 38, {cluster_percentage(clusters, layer_index, cluster_index)})">{cluster_percentage(clusters, layer_index, cluster_index, true)}%</td>
             {/each}
         </tr>
         {/each}
