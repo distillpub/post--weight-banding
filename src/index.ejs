@@ -226,7 +226,7 @@
       In the next section, we will construct our own simplified vision network and investigate variations on its architecture in order to understand exactly which conditions are necessary to produce weight banding.
     </p>
 
-    <h2>What affects banding</h2>
+    <h2 id="what-affects-banding">What affects banding</h2>
 
     <p>
       We'd like to understand which architectural decisions affect weight banding. This will involve trying out different architectures and seeing whether weight banding persists.
@@ -360,7 +360,7 @@
       <!-- In particular, we'll explore other techniques for preserving spatial information. -->
     </p>
 
-    <h3>Rotating images 90 degrees</h3>
+    <h3 id="90deg">Rotating images 90 degrees</h3>
     <p>
       To rule out bugs in training or some strange numerical problem, we decided
       to do a training run with the input rotated by 90 degrees. This sanity check
@@ -381,7 +381,7 @@
       </div>
     </figure>
 
-    <h3>Fully connected layer without global average pooling</h3>
+    <h3 id="fullyconnected-only">Fully connected layer without global average pooling</h3>
 
     <p>
       We remove the global average pooling step in our simplified model, allowing the fully connected layer to see all spatial positions at once. This model did <strong>not</strong> exhibit weight banding, but used 49x more parameters in the fully connected layer and overfit to the training set. This is pretty strong evidence that the use of aggressive pooling after the last convolutions in common models causes weight banding. This result is also consistent with AlexNet not showing this banding phenomenon (since it also does not have global average pooling).
@@ -401,7 +401,7 @@
       </div>
     </figure>
 
-    <h3>Average pooling along x-axis only</h3>
+    <h3 id="simplified-x-avgpool">Average pooling along x-axis only</h3>
     <p>
       We average out each row of the final convolutional layer, so that vertical absolute position is preserved but horizontal absolute position is not.<d-footnote>Since this model has 7x7 spatial positions in the final convolutional layer, this modification increases the number of parameters in the fully connected layer by 7x, but not the 49x of a complete fully connected layer with no pooling at all.</d-footnote> The banding at the last layer seems to go away, but on closer investigation, clear banding is still visible in layer <code>5a</code>, similar to the baseline model's <code>5b</code>. We found this result surprising.
     </p>
@@ -435,44 +435,45 @@
       </div>
     </figure>
 
-    <h3>Approaches where weight banding persisted</h3>
+    <h3 id="weight-banding-persisted">Approaches where weight banding persisted</h3>
     <p>
       We tried each of the modifications below, and found that weight banding was still present in each of these variants.
     </p>
     <ul>
-      <li>
+      <li id="learned-spatial-masks">
         Global average pooling with learned spatial masks. By applying several different spatial masks and global average pooling, we can allow the model to preserve some spatial information. Intuitively, each mask can select for a different subset of spatial positions.
 
         We tried experimental runs using each of 3, 5, or 16 different masks.
 
         The masks that were learned corresponded to large-scale global structure, but banding was still strongly present.
       </li>
-      <li>
+      <li id="attention">
         Using an attention layer instead of pooling/fully connected combination after layer
         <code>5b</code>.
       </li>
-      <!-- <li>
+      <li id="gap-mask">
         Adding a 7x7x512 mask with learned weights after <code>5b</code>. The hope was that a
         mask would help each <code>5b</code> neuron focus on the right parts of the 7x7 image
         without a convolution.
-      </li> -->
-      <li>
+      </li>
+      <li id="coordconv">
         Adding CoordConv<d-cite key="COORDCONV"></d-cite> channels to the inputs
         of <code>5a</code> and <code>5b</code>.
       </li>
-      <li>
+      <li id="channelgroups">
         Splitting the output of <code>5b</code> into 16 7x7x32 channel groups and feeding
         each group its own fully connected layer. The output of the 16 fully connected layers is then
         concatenated into the input of the final 1001-class fully connected layer.
       </li>
-      <!-- <li>
+      <li id="fullyconnected">
         Using a global max pool, 4096-unit fully connected layer, then 1001-unit fully connected layer (inspired
         by VGG).
-      </li> -->
+      </li>
     </ul>
 
     <p>
       An interactive diagram allowing you to explore the weights for these experiments and more can be found in the <a href="#figure-12">appendix</a>.
+    </p>
 
 
     <h2>Confirming banding interventions in common architectures</h2>
@@ -649,6 +650,9 @@
           affect banding, we clustered a normalized form of the weights in the
           experiments discussed above. In this figure, you can explore how the proportion and type
           of banding changes with the various experiments.
+        </p>
+        <p>
+          <mark>Highlighted</mark> labels indicate experiments where weight banding no longer persisted for the given intervention and layer.
         </p>
       </figcaption>
       <div class="l-body">

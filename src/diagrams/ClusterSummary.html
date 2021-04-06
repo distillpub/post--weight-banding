@@ -14,7 +14,21 @@
         <tbody>
         {#each model_layers as model_layer, layer_index}
         <tr>
-            <td>{model_layer.pretty_name}</td>
+            <td style="padding-right: 10px;">
+              {#if model_layer.highlight_me}
+                <mark>
+                  <a href="#{model_layer.pretty_name[0]}">
+                    {model_layer.pretty_name[1]}
+                  </a>
+                  (layer <code>{model_layer.pretty_name[2]}</code>)
+                </mark>
+              {:else}
+                <a href="#{model_layer.pretty_name[0]}">
+                  {model_layer.pretty_name[1]}
+                </a>
+                (layer <code>{model_layer.pretty_name[2]}</code>)
+              {/if}
+             </td>
             {#each clusters.cluster_sort_order as _, cluster_index}
             <td class="cluster" style="background: rgba(217, 157, 38, {cluster_percentage(clusters, layer_index, cluster_index)})">{cluster_percentage(clusters, layer_index, cluster_index, true)}%</td>
             {/each}
