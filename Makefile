@@ -5,3 +5,6 @@ download_weights:
 build:
 	rm static/generated_images/*.png
 	python3.7 build.py
+
+serve:
+	npm run dev
