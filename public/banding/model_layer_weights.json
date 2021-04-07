@@ -1,0 +1,346 @@
+[
+  {
+    "model": "simplified-base",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-base:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "what-affects-banding",
+      "Simplified base model",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-base",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-base:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "what-affects-banding",
+      "Simplified base model",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-base-2",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-base-2:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "what-affects-banding",
+      "Simplified base model 2",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-base-2",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-base-2:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "what-affects-banding",
+      "Simplified base model 2",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-90deg",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-90deg:v0/v1/5a/weights/read",
+    "highlight_me": true,
+    "pretty_name": [
+      "90deg",
+      "90 degree rotation",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-90deg",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-90deg:v0/v1/5b/weights/read",
+    "highlight_me": true,
+    "pretty_name": [
+      "90deg",
+      "90 degree rotation",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-attention-simple",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-attention-simple:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "attention",
+      "Attention (simple)",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-attention-simple",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-attention-simple:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "attention",
+      "Attention (simple)",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-attention-v1",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-attention-v1:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "attention",
+      "Attention (v1)",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-attention-v1",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-attention-v1:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "attention",
+      "Attention (v1)",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-channel-groups-bnorm-64",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-channel-groups-bnorm-64:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "channelgroups",
+      "Channel groups (bnorm 64)",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-channel-groups-bnorm-64",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-channel-groups-bnorm-64:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "channelgroups",
+      "Channel groups (bnorm 64)",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-coordconv",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-coordconv:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "coordconv",
+      "coordconv",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-coordconv",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-coordconv:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "coordconv",
+      "coordconv",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-fc-only",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-fc-only:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "fullyconnected-only",
+      "Fully connected only",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-fc-only",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-fc-only:v0/v1/5b/weights/read",
+    "highlight_me": true,
+    "pretty_name": [
+      "fullyconnected-only",
+      "Fully connected only",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-fc",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-fc:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "fullyconnected",
+      "Fully connected",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-fc",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-fc:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "fullyconnected",
+      "Fully connected",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-gap-mask-3-sig",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-gap-mask-3-sig:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "gap-mask",
+      "Gap mask (3-sig)",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-gap-mask-3-sig",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-gap-mask-3-sig:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "gap-mask",
+      "Gap mask (3-sig)",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-gap-mask-5-sig",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-gap-mask-5-sig:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "gap-mask",
+      "Gap mask (5-sig)",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-gap-mask-5-sig",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-gap-mask-5-sig:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "gap-mask",
+      "Gap mask (5-sig)",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-gap-mask-16-sig",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-gap-mask-16-sig:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "gap-mask",
+      "Gap mask (16-sig)",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-gap-mask-16-sig",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-gap-mask-16-sig:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "gap-mask",
+      "Gap mask (16-sig)",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-l2-masks-3",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-l2-masks-3:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "learned-spatial-masks",
+      "L2 masks (3)",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-l2-masks-3",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-l2-masks-3:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "learned-spatial-masks",
+      "L2 masks (3)",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-l2-masks-5",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-l2-masks-5:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "learned-spatial-masks",
+      "L2 masks (5)",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-l2-masks-5",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-l2-masks-5:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "learned-spatial-masks",
+      "L2 masks (5)",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-l2-masks-16",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-l2-masks-16:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "learned-spatial-masks",
+      "L2 masks (16)",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-l2-masks-16",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-l2-masks-16:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "learned-spatial-masks",
+      "L2 masks (16)",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-spatial-film",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-spatial-film:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "weight-banding-persisted",
+      "Spatial film",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-spatial-film",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-spatial-film:v0/v1/5b/weights/read",
+    "pretty_name": [
+      "weight-banding-persisted",
+      "Spatial film",
+      "5b"
+    ]
+  },
+  {
+    "model": "simplified-x-avgpool",
+    "layer": "v0/v1/5a/weights/read",
+    "name": "simplified-x-avgpool:v0/v1/5a/weights/read",
+    "pretty_name": [
+      "simplified-x-avgpool",
+      "Average pooling, x-axis only",
+      "5a"
+    ]
+  },
+  {
+    "model": "simplified-x-avgpool",
+    "layer": "v0/v1/5b/weights/read",
+    "name": "simplified-x-avgpool:v0/v1/5b/weights/read",
+    "highlight_me": true,
+    "pretty_name": [
+      "simplified-x-avgpool",
+      "Average pooling, x-axis only",
+      "5b"
+    ]
+  }
+]
