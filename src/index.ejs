@@ -589,35 +589,10 @@
       It’s unclear whether weight banding is “good” or “bad.”<d-footnote>On one hand, the 90º rotation experiment shows that weight banding is a product of the dataset and is encoding useful information into the weights. However, if spatial information could flow through the network in a different, more efficient way, then perhaps the channels would be able to focus on encoding relationships between features without needing to track spatial positions.</d-footnote> We don’t have any recommendation or action to take away from it. However, it is an example of a consistent link between architecture decisions and the resulting trained weights. It has the right sort of flavor for something that could inform architectural design, even if it isn’t particularly actionable itself.
     </p>
     <p>
-      More generally, weight banding is an example of a large-scale structure. One of the major limitations of circuits has been how small-scale it is. We’re hopeful that larger scale structures like weight banding may help circuits form a higher-level story of neural networks.
+      One of the major limitations of circuits has been how small-scale it is.
+      Alongside <a href="https://distill.pub/2020/circuits/equivariance/">equivariance</a> and <a href="https://distill.pub/2020/circuits/branch-specialization/">branch specialization</a>,
+      we're hopeful that larger-scale structures like weight banding may help the circuits approach develop a higher-level story of neural networks.
     </p>
-
-    <!-- <p>
-      Ultimately the two interventions that clearly affected the amount or type
-      of banding were 90º rotation and skipping the final pooling
-      operation. The 90º rotation intervention can be an easy to implement
-      test for spatial banding in your dataset. Skipping the pooling operation
-      is a more impactful intervention but is not recommended since it
-      significantly increases parameter counts and overfit in our tests.
-    </p> -->
-
-    <!-- <p>
-      It's unclear if weight banding is a feature or a bug. On one hand, the 90º rotation experiment shows that weight banding is a product of the
-      dataset and is encoding useful information into the weights. However, if
-      spatial information can flow through the network in a more efficient way,
-      then perhaps the filters can focus on encoding relationships between
-      features without needing to track these spatial positions. The most interesting
-      finding about this phenomenon is that convolutional layers will very
-      consistently add banding into their weights whenever spatial information
-      gets destroyed through pooling operations, presumably with the goal of
-      preserving some of the destroyed information.
-    </p> -->
-
-    <!-- <p>
-      Currently, it seems that weight banding is a consistent phenomenon that
-      emerges from combinations of convolutions and pooling and we hope to
-      explore it further in the future.
-    </p> -->
     <section id="thread-nav" class="thread-info" style="margin-top: 10px; margin-bottom: 40px;">
       <img class="icon" src="images/multiple-pages.svg" width="43px" height="50px">
       <p class="explanation">
